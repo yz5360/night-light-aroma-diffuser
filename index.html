@@ -1,113 +1,77 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Night Light & Aroma Diffuser · Interactive Model</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Atmosphere — An Expressive Aroma Diffuser</title>
   <style>
-    :root { --ink:#23313a; --muted:#71808a; --line:#dce6e8; --green:#61bb8d; --warm:#ffd98a; --mist:#c9edf2; }
-    * { box-sizing:border-box; }
-    body { margin:0; min-height:100vh; display:grid; place-items:center; padding:24px; font-family:Inter,system-ui,-apple-system,"PingFang SC",sans-serif; color:var(--ink); background:linear-gradient(145deg,#edf7f5,#fff8ee); }
-    .app { width:min(920px,100%); display:grid; grid-template-columns:1.1fr .9fr; gap:22px; }
-    .card { background:rgba(255,255,255,.82); border:1px solid rgba(255,255,255,.9); border-radius:28px; box-shadow:0 22px 55px rgba(45,74,78,.13); padding:28px; }
-    header { grid-column:1/-1; } h1 { margin:0 0 7px; font-size:clamp(26px,4vw,39px); letter-spacing:-.04em; } p { color:var(--muted); margin:0; line-height:1.6; }
-    .machine-wrap { display:grid; place-items:center; min-height:450px; overflow:hidden; }
-    .machine { position:relative; width:250px; height:330px; border-radius:82px 82px 42px 42px; background:linear-gradient(100deg,#eef2f0,#fff 42%,#e7eeeb); box-shadow:inset -14px -14px 25px #d5dfdc, inset 10px 4px 20px white, 0 18px 30px #b5c8c5; }
-    .machine::before { content:""; position:absolute; top:24px; left:27px; right:27px; height:34px; border-radius:50%; background:#f8fbfa; box-shadow:inset 0 -5px 7px #d4dfdd; }
-    .machine.on { box-shadow:inset -14px -14px 25px #d5dfdc, inset 10px 4px 20px white, 0 18px 30px #b5c8c5, 0 0 42px rgba(104,219,190,.28); }
-    .mist { position:absolute; width:100%; height:120px; top:-65px; opacity:0; pointer-events:none; background:radial-gradient(ellipse at 50% 100%,rgba(202,243,245,.7),transparent 64%); filter:blur(2px); }
-    .mist.active { opacity:1; animation:float 2.8s infinite ease-in-out; }
-    @keyframes float { 50% { transform:translateY(-15px) scale(1.08); opacity:.55; } }
-    .glow { position:absolute; inset:95px 53px 93px; border-radius:45%; background:var(--warm); opacity:0; filter:blur(20px); transition:.35s; }
-    .glow.low { opacity:.22; } .glow.high { opacity:.58; }
-    .panel { position:absolute; bottom:23px; left:33px; right:33px; display:flex; justify-content:space-between; align-items:center; }
-    .buttons { display:flex; gap:10px; } button { border:0; cursor:pointer; font:inherit; color:var(--ink); transition:.18s; } button:active { transform:scale(.96); }
-    .round { width:50px; height:50px; border-radius:50%; background:#f9fbfa; box-shadow:0 3px 10px #c6d3d0; font-size:21px; } .round:hover { background:#eaf8f4; }
-    .status { display:flex; gap:12px; align-items:center; margin:22px 0; padding:16px; border-radius:17px; background:#f5faf8; }
-    .dot { width:12px; height:12px; border-radius:50%; background:#c8d3d1; } .dot.live { background:var(--green); box-shadow:0 0 0 6px #dff5e9; }
-    .readout { font-size:30px; font-weight:750; letter-spacing:-.04em; } .sub { color:var(--muted); font-size:13px; }
-    .timer { margin:10px 0 20px; height:9px; background:#edf2f1; border-radius:99px; overflow:hidden; } .timer > div { height:100%; width:0; background:linear-gradient(90deg,var(--green),#95ddaf); transition:width .4s; }
-    .controls { display:grid; gap:12px; } .control { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:15px 16px; border:1px solid var(--line); border-radius:16px; background:white; } .control button { padding:10px 15px; border-radius:12px; background:#e9f7f0; font-weight:700; }
-    .scale { position:absolute; bottom:88px; left:30px; display:grid; gap:5px; } .mark { display:flex; align-items:center; gap:7px; color:#8c999c; font-size:11px; font-weight:600; } .mark::before { content:""; width:6px; height:6px; border-radius:50%; background:#d0d9d6; } .mark.active { color:#247953; } .mark.active::before { background:#42c97e; box-shadow:0 0 8px #42c97e; }
-    .legend { font-size:13px; color:var(--muted); margin-top:20px; } .legend strong { color:var(--ink); }
-    @media (max-width:700px) { .app { grid-template-columns:1fr; } header { grid-column:auto; } .machine-wrap { min-height:390px; } }
+    :root{font-family:Inter,system-ui,-apple-system,sans-serif;color:#233c35;background:#edf5f0}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 85% 8%,#fff4d9,transparent 30%),linear-gradient(140deg,#eaf5ef,#f7f3eb);min-height:100vh}button,input{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible{outline:3px solid #40916d;outline-offset:3px}button:disabled{opacity:.45;cursor:not-allowed}.page{max-width:1180px;margin:auto;padding:30px 24px 56px}.top{display:flex;justify-content:space-between;gap:16px;color:#628073;text-transform:uppercase;letter-spacing:.13em;font-size:.78rem;font-weight:800}.hero{padding:42px 0 30px;max-width:730px}.eyebrow{color:#398466;text-transform:uppercase;font-size:.75rem;font-weight:800;letter-spacing:.17em}.hero h1{font:normal clamp(3rem,6vw,5.3rem)/1.02 Georgia,serif;letter-spacing:-.05em;margin:12px 0 19px}.hero p{font-size:1.08rem;color:#60766d;line-height:1.6;margin:0}.grid{display:grid;grid-template-columns:1.05fr .95fr;gap:22px}.card{background:rgba(255,255,255,.84);border:1px solid white;border-radius:26px;box-shadow:0 20px 55px #43695014}.controls{padding:30px}h2{font:normal 1.65rem Georgia,serif;margin:0 0 22px}fieldset{border:0;padding:0;margin:0 0 25px}legend,.slider-label{font-weight:750;margin-bottom:12px;font-size:.96rem}.choices{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.choice{min-height:66px;border:1px solid #d5e5db;border-radius:14px;background:#f8fbf8;color:#365c4b;font-weight:700;padding:10px 5px}.choice span{display:block;font-size:.73rem;font-weight:400;color:#6f887a;margin-top:3px}.choice:hover{border-color:#71b493}.choice[aria-pressed=true]{background:#dff1e5;border-color:#4ca475;box-shadow:inset 0 0 0 1px #4ca475}.slider-label{display:flex;justify-content:space-between}.slider-label output{color:#2e8a61}input[type=range]{width:100%;accent-color:#428f6a}.scale{display:flex;justify-content:space-between;color:#7a8e82;font-size:.78rem}.rule{height:1px;background:#dfebe2;margin:24px 0}.suggestion{background:#e9f3eb;border-radius:18px;padding:22px}.suggestion h3{font:normal 2rem Georgia,serif;margin:8px 0}.suggestion p{margin:0;color:#587060;line-height:1.55}.suggestion .small{font-size:.83rem;margin-top:12px}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:17px}.actions button{border-radius:12px;min-height:46px;padding:10px 15px;font-weight:750}.primary{border:1px solid #245f46;background:#245f46;color:white}.primary:hover:not(:disabled){background:#184631}.secondary{border:1px solid #c8dfd0;background:white;color:#32644d}.secondary:hover:not(:disabled){background:#f2faf4}.visual{--aura:#dbeee3;--lamp:#ffe0a2;position:relative;overflow:hidden;min-height:650px;padding:27px;display:flex;flex-direction:column;background:radial-gradient(circle at 50% 56%,var(--aura),transparent 49%),linear-gradient(150deg,#f9fcf9,#e4f0e8);transition:background .4s}.visual-top{display:flex;justify-content:space-between;align-items:start;z-index:2}.badge{border-radius:99px;background:#fffaf0;padding:7px 12px;font-size:.79rem;font-weight:700;color:#687365}.stage{position:relative;display:grid;place-items:center;flex:1;min-height:395px}.halo{position:absolute;width:310px;height:310px;border-radius:50%;background:radial-gradient(circle,#ffffffba,transparent 70%)}.visual[data-phase=releasing] .halo{animation:breathe 4s ease-in-out infinite}@keyframes breathe{50%{transform:scale(1.17);opacity:.55}}.mist{position:absolute;top:16px;width:170px;height:140px;background:radial-gradient(ellipse at 50% 100%,#ffffffdc,transparent 68%);filter:blur(5px);opacity:0}.visual[data-phase=releasing] .mist{opacity:1;animation:rise 3s ease-in-out infinite}@keyframes rise{50%{transform:translateY(-23px) scale(1.2);opacity:.48}}.device{position:relative;width:205px;height:290px;border-radius:74px 74px 40px 40px;background:linear-gradient(100deg,#e1e9e3,#fff 41%,#e7efe8);box-shadow:inset -14px -14px 20px #cbd9cf,inset 9px 4px 20px white,0 22px 30px #526e5a42;z-index:1}.device:before{content:"";position:absolute;top:20px;left:24px;right:24px;height:32px;border-radius:50%;background:#fafcf8;box-shadow:inset 0 -5px 7px #d1ddd3}.glow{position:absolute;inset:80px 37px 75px;border-radius:50%;background:var(--lamp);opacity:0;filter:blur(19px);transition:.3s}.times{position:absolute;bottom:68px;left:22px;display:grid;gap:5px;font-size:.7rem;color:#7c9181}.time{display:flex;align-items:center;gap:7px}.time:before{content:"";width:6px;height:6px;border-radius:50%;background:#ccd9ce}.time.active{color:#226a48;font-weight:800}.time.active:before{background:#42c575;box-shadow:0 0 8px #42c575}.device-name{position:absolute;bottom:30px;left:22px;color:#6d8776;font-size:.62rem;letter-spacing:.11em;font-weight:800}.device-buttons{position:absolute;bottom:20px;right:17px;display:flex;gap:8px}.device-buttons button{border:0;border-radius:50%;width:39px;height:39px;background:#f9fcf8;box-shadow:0 3px 8px #b7cbbd;font-size:1.2rem;color:#37634a}.response{position:relative;z-index:2;background:#ffffffb8;border:1px solid white;border-radius:17px;padding:18px 20px}.response strong{font-size:1.1rem}.response p{color:#637c6c;line-height:1.5;margin:7px 0 0}.meter{height:6px;background:#dceadd;border-radius:99px;overflow:hidden;margin-top:15px}.meter span{display:block;width:0;height:100%;background:#56aa78}.bottom{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:22px}.bottom .card{padding:24px 28px}.bottom h2{font-size:1.4rem;margin-bottom:9px}.bottom p{margin:0;line-height:1.6;color:#60776b}.bottom b{color:#287d54}@media(max-width:800px){.grid,.bottom{grid-template-columns:1fr}.visual{min-height:600px}}@media(max-width:500px){.page{padding:19px 13px 35px}.top{font-size:.65rem}.controls{padding:21px}.visual{padding:21px;min-height:570px}.hero{padding-top:36px}.choice{font-size:.85rem}.choice span{font-size:.69rem}}
   </style>
 </head>
 <body>
-  <main class="app">
-    <header><h1>Night Light & Aroma Diffuser</h1><p>An interactive model of the appliance's states and controls</p></header>
-    <section class="card machine-wrap" aria-label="Appliance state visualization">
-      <div id="machine" class="machine"><div id="mist" class="mist"></div><div id="glow" class="glow"></div><div class="scale" aria-label="Mist timer settings"><div class="mark" data-min="180">180 min</div><div class="mark" data-min="120">120 min</div><div class="mark" data-min="60">60 min</div><div class="mark" data-min="30">30 min</div></div><div class="panel"><span class="sub">POWERED</span><div class="buttons"><button class="round" id="mistBtn" aria-label="Change mist timer">〰</button><button class="round" id="lightBtn" aria-label="Change light brightness">☼</button></div></div></div>
-    </section>
-    <section class="card">
-      <div class="status"><span id="dot" class="dot"></span><div><div id="readout" class="readout">Mist off</div><div id="detail" class="sub">Press Mist to start a timer</div></div></div>
-      <div class="timer"><div id="progress"></div></div>
-      <div class="controls">
-        <div class="control"><span>Mist</span><button id="mistControl">Start / Change</button></div>
-        <div class="control"><span>Light: <strong id="lightLabel">Off</strong></span><button id="lightControl">Change brightness</button></div>
-      </div>
-      <p class="legend"><strong>Controls:</strong> Mist cycles through 180 → 120 → 60 → 30 minutes → Off. Light cycles through Off → High → Low → Off.</p>
-    </section>
+  <main class="page">
+    <div class="top"><span>Atmosphere / Interactive Prototype</span><span>Yaqi Zhang · Activity 4</span></div>
+    <header class="hero"><div class="eyebrow">An aroma diffuser that listens</div><h1>Make room for how you feel.</h1><p>Choose what you are doing and how you feel. The diffuser suggests a scent, light, and pace. The final choice stays with you.</p></header>
+    <div class="grid">
+      <section class="card controls" aria-label="Experience controls">
+        <h2>Set the moment</h2>
+        <fieldset><legend>1 · What are you doing?</legend><div class="choices"><button class="choice" data-scene="Study" aria-pressed="false">Study<span>Find focus</span></button><button class="choice" data-scene="Rest" aria-pressed="false">Rest<span>Slow down</span></button><button class="choice" data-scene="Reset" aria-pressed="false">Reset<span>Begin again</span></button></div></fieldset>
+        <fieldset><legend>2 · How do you feel?</legend><div class="choices"><button class="choice" data-mood="Distracted" aria-pressed="false">Distracted<span>Scattered</span></button><button class="choice" data-mood="Stressed" aria-pressed="false">Stressed<span>Too much</span></button><button class="choice" data-mood="Restless" aria-pressed="false">Restless<span>Need a shift</span></button></div></fieldset>
+        <div class="slider-label"><label for="strength">3 · Scent strength</label><output id="strengthValue">Gentle</output></div><input type="range" id="strength" min="1" max="3" step="1" value="1"><div class="scale"><span>Gentle</span><span>Balanced</span><span>Expressive</span></div>
+        <div class="rule"></div>
+        <div class="suggestion" aria-live="polite"><div class="eyebrow">Your suggestion</div><h3 id="scent">Start with a moment</h3><p id="reason">Choose an activity and a feeling to see how the diffuser responds.</p><p class="small" id="intensityNote"></p></div>
+        <div class="actions"><button class="primary" id="start" disabled>Start this atmosphere</button><button class="secondary" id="pause" disabled>Too strong · pause</button><button class="secondary" id="end" disabled>End session</button></div>
+      </section>
+      <section class="card visual" id="visual" data-phase="idle" aria-label="Diffuser response">
+        <div class="visual-top"><span class="eyebrow">Live response</span><span class="badge" id="badge">Waiting for you</span></div>
+        <div class="stage"><div class="halo"></div><div class="mist"></div><div class="device" id="device"><div class="glow" id="glow"></div><div class="times" aria-label="Mist timer"><div class="time" data-time="180">180 min</div><div class="time" data-time="120">120 min</div><div class="time" data-time="60">60 min</div><div class="time" data-time="30">30 min</div></div><div class="device-name">ATMOSPHERE</div><div class="device-buttons"><button id="timer" aria-label="Change mist timer">〰</button><button id="light" aria-label="Change light brightness">☼</button></div></div></div>
+        <div class="response" aria-live="polite"><strong id="responseTitle">A moment to begin</strong><p id="responseText">Your choices will appear here as a scent, light, and movement.</p><div class="meter" id="meter" role="progressbar" aria-label="Session time remaining" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="fill"></span></div></div>
+      </section>
+    </div>
+    <div class="bottom"><section class="card"><h2>Design goal</h2><p>How can an appliance respond to feeling without pretending to know it? You name your mood; it offers a suggestion; you can accept, pause, or change it.</p></section><section class="card"><h2>Behind the interaction</h2><p id="logic">Select a scene and mood to reveal the rule behind the response.</p></section></div>
   </main>
   <script>
-    // Appliance state variables
-    let isPowered = true;
-    let waterSufficient = true;
-    let mistMode = 0; // 0 means off; otherwise minutes
-    let remainingSeconds = 0;
-    let lightMode = 0; // 0 off, 1 high, 2 low
-    const mistModes = [0, 180, 120, 60, 30];
-    const $ = (id) => document.getElementById(id);
-
-    function beep() {
-      // A short visual/audio acknowledgement for a button press.
-      document.body.animate([{filter:'brightness(1)'},{filter:'brightness(1.08)'},{filter:'brightness(1)'}], {duration:180});
+    const $=id=>document.getElementById(id);
+    const state={scene:null,mood:null,strength:1,phase:'idle',timer:180,remaining:0,light:0};
+    const strengths=['','Gentle','Balanced','Expressive'],timers=[180,120,60,30];
+    const recipes={
+      Study:{Distracted:['Citrus','A crisp scent and clear light to help you settle into one task.','One thing at a time.','#f5e8bd','#ffe0a3'],Stressed:['Lavender','A softer start before asking yourself to focus.','Let’s slow down first.','#e3ddf2','#e9d8ff'],Restless:['Cedar','A grounded scent to make staying with a task feel easier.','Find a steady rhythm.','#dce9d7','#e4c9a0']},
+      Rest:{Distracted:['Cedar','A familiar, grounded scent to leave the day behind.','You can set the day down.','#dce9d7','#e4c9a0'],Stressed:['Lavender','A quiet atmosphere for easing into rest.','Nothing else is needed right now.','#e3ddf2','#e9d8ff'],Restless:['Chamomile','A warm scent and dim light for a slower pace.','Take your time arriving here.','#f7e9c5','#ffdfa7']},
+      Reset:{Distracted:['Peppermint','A fresh cue to begin again with a clearer head.','A new beginning can be small.','#d4efe6','#bfeae0'],Stressed:['Cedar','A grounded pause before you decide what comes next.','Pause before the next step.','#dce9d7','#e4c9a0'],Restless:['Citrus','A bright scent for a gentle shift of energy.','Let the moment change.','#f5e8bd','#ffe0a3']}
+    };
+    let lastTick=Date.now();
+    function recipe(){return state.scene&&state.mood?recipes[state.scene][state.mood]:null}
+    function select(kind,value){state[kind]=value;if(state.phase==='releasing'||state.phase==='paused')state.remaining=0;state.phase=recipe()?'suggesting':'idle';render()}
+    function start(){if(!recipe())return;state.phase='releasing';state.remaining=state.timer*60;state.light=1;lastTick=Date.now();render()}
+    function pause(){if(state.phase==='releasing')state.phase='paused';else if(state.phase==='paused'){state.phase='releasing';lastTick=Date.now()}render()}
+    function end(){state.phase=recipe()?'suggesting':'idle';state.remaining=0;state.light=0;render()}
+    function timer(){state.timer=timers[(timers.indexOf(state.timer)+1)%timers.length];if(state.phase==='releasing'||state.phase==='paused')state.remaining=state.timer*60;render()}
+    function light(){state.light=(state.light+1)%3;render()}
+    function render(){
+      const r=recipe(),active=state.phase==='releasing',paused=state.phase==='paused',running=active||paused;
+      document.querySelectorAll('[data-scene]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.scene===state.scene));
+      document.querySelectorAll('[data-mood]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mood===state.mood));
+      $('strengthValue').textContent=strengths[state.strength];
+      $('scent').textContent=r?r[0]:'Start with a moment';
+      $('reason').textContent=r?r[1]:'Choose an activity and a feeling to see how the diffuser responds.';
+      $('intensityNote').textContent=r?(state.mood==='Stressed'&&state.strength===3?'Expressive is softened to Balanced for a gentler start.':'Suggested intensity: '+strengths[state.strength]+'.'):'';
+      $('start').disabled=!r;$('start').textContent=running?'Restart with these choices':'Start this atmosphere';
+      $('pause').disabled=!running;$('pause').textContent=paused?'Resume release':'Too strong · pause';$('end').disabled=!running;
+      $('visual').dataset.phase=state.phase;$('visual').style.setProperty('--aura',r?r[3]:'#dbeee3');$('visual').style.setProperty('--lamp',r?r[4]:'#ffe0a2');
+      $('glow').style.opacity=state.light===1?'.7':state.light===2?'.28':'0';
+      $('badge').textContent=active?'Releasing':paused?'Paused':r?'Suggestion ready':'Waiting for you';
+      $('responseTitle').textContent=active?r[2]:paused?'You are in control.':r?'A suggestion, not a command.':'A moment to begin';
+      $('responseText').textContent=active?`${r[0]} · ${effectiveStrength()} · ${state.timer} min timer · ${Math.ceil(state.remaining/60)} min left.`:paused?`Release paused. ${Math.ceil(state.remaining/60)} min remains.`:r?`${state.scene} + ${state.mood} suggests ${r[0]}. Press Start if it feels right.`:'Your choices will appear here as a scent, light, and movement.';
+      const percent=running?Math.max(0,Math.min(100,state.remaining/(state.timer*60)*100)):0;$('fill').style.width=percent+'%';$('meter').setAttribute('aria-valuenow',Math.round(percent));
+      document.querySelectorAll('.time').forEach(m=>m.classList.toggle('active',running&&Number(m.dataset.time)===state.timer));
+      $('logic').textContent=r?`${state.scene} + ${state.mood} selects ${r[0]}. ${state.mood==='Stressed'?'Expressive strength is limited to Balanced.':'The slider controls release strength.'} Start changes the state to releasing; Too strong changes it to paused.`:'Select a scene and mood to reveal the rule behind the response.';
     }
-
-    function setMist() {
-      if (!isPowered || !waterSufficient) return;
-      const next = (mistModes.indexOf(mistMode) + 1) % mistModes.length;
-      mistMode = mistModes[next];
-      remainingSeconds = mistMode * 60;
-      beep();
-      render();
-    }
-
-    function setLight() {
-      lightMode = (lightMode + 1) % 3;
-      beep();
-      render();
-    }
-
-    function render() {
-      const running = mistMode > 0 && remainingSeconds > 0;
-      $('machine').classList.toggle('on', running);
-      $('mist').classList.toggle('active', running);
-      $('dot').classList.toggle('live', running);
-      $('readout').textContent = running ? `Mist on · ${mistMode} min` : 'Mist off';
-      $('detail').textContent = running ? `${formatTime(remainingSeconds)} remaining · stops automatically` : 'Press Mist to start a timer';
-      $('progress').style.width = running ? `${(remainingSeconds / (mistMode * 60)) * 100}%` : '0%';
-      document.querySelectorAll('.mark').forEach(mark => mark.classList.toggle('active', running && Number(mark.dataset.min) === mistMode));
-      $('glow').className = `glow ${lightMode === 1 ? 'high' : lightMode === 2 ? 'low' : ''}`;
-      $('lightLabel').textContent = lightMode === 0 ? 'Off' : lightMode === 1 ? 'High' : 'Low';
-    }
-
-    function formatTime(total) {
-      const hours = Math.floor(total / 3600), minutes = Math.floor((total % 3600) / 60);
-      return hours ? `${hours} hr ${minutes} min` : `${minutes} min`;
-    }
-
-    $('mistBtn').addEventListener('click', setMist);
-    $('mistControl').addEventListener('click', setMist);
-    $('lightBtn').addEventListener('click', setLight);
-    $('lightControl').addEventListener('click', setLight);
-    setInterval(() => {
-      if (mistMode > 0 && remainingSeconds > 0) {
-        remainingSeconds--;
-        if (remainingSeconds === 0) { mistMode = 0; beep(); }
-        render();
-      }
-    }, 1000);
+    function effectiveStrength(){return strengths[state.mood==='Stressed'?Math.min(state.strength,2):state.strength]}
+    document.querySelectorAll('[data-scene]').forEach(b=>b.addEventListener('click',()=>select('scene',b.dataset.scene)));
+    document.querySelectorAll('[data-mood]').forEach(b=>b.addEventListener('click',()=>select('mood',b.dataset.mood)));
+    $('strength').addEventListener('input',e=>{state.strength=Number(e.target.value);render()});
+    $('start').addEventListener('click',start);$('pause').addEventListener('click',pause);$('end').addEventListener('click',end);$('timer').addEventListener('click',timer);$('light').addEventListener('click',light);
+    setInterval(()=>{const now=Date.now();if(state.phase==='releasing'){state.remaining=Math.max(0,state.remaining-Math.max(1,Math.round((now-lastTick)/1000)));if(state.remaining===0){state.phase='suggesting';state.light=0}render()}lastTick=now},1000);
     render();
   </script>
 </body>
